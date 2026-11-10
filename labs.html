@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Harness Engineering Workshop — Lab Guide</title>
+<meta name="description" content="Lab guide for the 3-hour Harness Engineering hands-on workshop. Every command, every expected result, and the capstone." />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<style>
+body{font-family:Inter,system-ui,sans-serif;color:#1c1f26;background:#fdfcf9;line-height:1.55;margin:0}
+main{max-width:920px;margin:0 auto;padding:2rem 1.5rem 4rem}
+h1,h2,h3{font-family:'Space Grotesk',sans-serif;line-height:1.15}
+h1{font-size:2.2rem} h2{font-size:1.5rem;margin-top:2.2rem;border-top:2px solid #e6e1d6;padding-top:1.2rem}
+a{color:#ff6a2b;font-weight:600}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;background:#f4f1ea;padding:.1rem .35rem;border-radius:4px}
+pre{background:#0b0e14;color:#e8ecf2;border-radius:10px;padding:1rem;overflow-x:auto}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;margin:1rem 0}
+th,td{border:1px solid #e6e1d6;padding:.5rem .7rem;text-align:left;vertical-align:top}
+th{background:#f4f1ea}
+.top{color:#5d6470}
+.btn{display:inline-block;background:#ff6a2b;color:#fff;padding:.5rem 1.1rem;border-radius:999px;text-decoration:none}
+</style>
+</head>
+<body>
+<main>
+<p class="top"><a href="index.html">← Back to the slide deck</a> · Harness Engineering — 3-Hour Hands-On Workshop · Ken Huang</p>
+<h1>Lab Guide</h1>
+<p>Source: <a href="https://github.com/kenhuangus/Harness-Engineering-Design-Patterns">kenhuangus/Harness-Engineering-Design-Patterns</a>, the companion repo for <em>Harness Engineering: Design Patterns for Securing Long-Horizon Multi-Agent AI Systems</em> (Packt). Book table of contents: <a href="https://docs.google.com/document/d/1EtLyxS9EH0MR3WxBwG9lWkU40Lpqr4k4CKhqROGugXo/edit">Google Doc</a>. No cloud account, no paid model API, no live secrets. Python 3.11+ and the standard library only.</p>
+<p><strong>Method for every lab:</strong> run first, read the JSON decisions without looking at the implementation, identify the unsafe path and the artifact an auditor would ask for, then inspect <code>scenario.py</code> to find the control that changed the outcome.</p>
+
+<h2>Setup — 0:00–0:10</h2>
+<pre><code>git clone https://github.com/kenhuangus/Harness-Engineering-Design-Patterns.git
+cd Harness-Engineering-Design-Patterns
+python3 -m venv .venv &amp;&amp; source .venv/bin/activate
+python -m pip install -e .
+python -m harnesslab.cli list
+python -m harnesslab.cli run all
+python -m unittest discover -s tests</code></pre>
+<p>Expected: <code>list</code> shows ch01–ch10. <code>run all</code> prints PASS for all 10. <code>unittest</code> prints OK, 5 tests. Troubleshooting: on Debian/Ubuntu, system Python refuses <code>pip install</code> outside a venv (PEP 668) — use the venv above. Python must be 3.11 or later (<code>python3 --version</code>).</p>
+
+<h2>Expected results</h2>
+<table>
+<tr><th>Lab</th><th>Chapter</th><th>Command</th><th>Expected</th></tr>
+<tr><td>A1</td><td>1 · Control Plane</td><td><code>run ch01 --json</code></td><td>PASS, 0.980</td></tr>
+<tr><td>A2</td><td>2 · Autonomy</td><td><code>run ch02 --json</code></td><td>PASS, 1.000</td></tr>
+<tr><td>B1</td><td>3 · Identity</td><td><code>run ch03 --json</code></td><td>PASS, 1.000</td></tr>
+<tr><td>B1</td><td>4 · Intent</td><td><code>run ch04 --json</code></td><td>PASS, 1.000</td></tr>
+<tr><td>B2</td><td>5 · Context</td><td><code>run ch05 --json</code></td><td>PASS, 1.000</td></tr>
+<tr><td>C1</td><td>6 · Memory</td><td><code>run ch06 --json</code></td><td>PASS, 1.000</td></tr>
+<tr><td>C1</td><td>7 · Observability</td><td><code>run ch07 --json</code></td><td>PASS, 1.000</td></tr>
+<tr><td>C2</td><td>8 · Runtime Steering</td><td><code>run ch08 --json</code></td><td>PASS, 1.000</td></tr>
+<tr><td>D</td><td>9 · Fleet</td><td><code>run ch09 --json</code></td><td>PASS, 1.000</td></tr>
+<tr><td>D</td><td>10 · Data Governance</td><td><code>run ch10 --json</code></td><td>PASS, 1.000</td></tr>
+</table>
+<p>Each chapter also ships a captured run in <code>chapters/chXX/LabResult/</code> (<code>result.json</code>, <code>stdout.txt</code>, <code>stderr.txt</code>, <code>README.md</code>). Compare your fresh run against it.</p>
+
+<h2>Lab A1 — ch01: Harness as the Control Plane</h2>
+<p>Scenario: <code>shared-deploy-swarm</code> — planner, researcher, coder, deployer share one broad credential and deploy with no checkpoint. Find in the JSON: the safe internal-repo patch (allowed); five blocked or escalated paths (poisoned memory write, vault read, deploy attempt, privileged operation, unapproved egress); the quarantined external comment (injection markers + lethal-trifecta pattern); the checkpoint before deployment; the hill-climb path 0.24 → 0.96. Book: sections 1.1–1.12.</p>
+
+<h2>Lab A2 — ch02: Graduated Autonomy</h2>
+<p>Find: reversible patch allowed; customer communication queued, not sent; budget-exhaustion denial; blocked irreversible customer-data action; rejected secret-access waiver; renewed lease after expiry; rollback hook after the reversible write. Book: sections 2.3–2.5 and 2.13 (Autonomy Review Board).</p>
+
+<h2>Lab B1 — ch03 + ch04: Identity and Intent</h2>
+<p>ch03: four agent identities, separate task identities, audience mismatch (ticketing credential fails on the repo), expired credential denied, delegation chain <code>agent-planner → agent-patcher</code>, revocation denied on re-use. ch04: the billing remediation agent stays inside its purpose; tool scope, data scope, risk, evidence, stale goals, and resume state are each checked. Book: sections 3.3–3.10, 3.13 (walkthrough), and 4.2–4.7.</p>
+
+<h2>Lab B2 — ch05: Context</h2>
+<p>Find: high-assurance context profile selected; only fresh trusted context released; external item quarantined with findings; lethal-trifecta egress blocked; checkpoint with quarantine evidence persisted. Book: sections 5.4–5.9 and 5.12.</p>
+
+<h2>Lab C1 — ch06 + ch07: Memory and Observability</h2>
+<p>ch06: gated write, handoff promotion, ledger entry, tenant isolation, TTL expiry, tombstone on rollback. ch07: risky action observed with redacted traces, evidence sealed with artifact hashes, replay bundle built, benchmark regression detected, hill-climbing eval loop governed. Book: sections 6.3–6.7 and 7.2–7.9, 7.13.</p>
+
+<h2>Lab C2 — ch08: Runtime Steering</h2>
+<p>Find: warning on hostile context, pause, blocked unsafe output, killed retrying subtask, recovery from checkpoint, replay of evidence, safe rollback with compensation, bounded policy overlay expiring. Book: sections 8.1–8.5.</p>
+
+<h2>Lab D — ch09 + ch10: Fleet and Data Governance</h2>
+<p>ch09: tenant bulkheads, queues, quotas, rate-limit back-pressure, idempotent retry, quarantined compromised worker, capacity epoch. ch10: labeled data through approved profiles, unsafe egress blocked, residency drift blocked, secret leakage escalated, labels persisted across resume, erasure proved across memory and trace evidence. Book: sections 9.2–9.8, 9.11, and 10.3–10.10.</p>
+
+<h2>Capstone — extend one lab (20 minutes)</h2>
+<p>Pick one failure, implement it in the chapter scenario, run it, and show the new decision in the JSON:</p>
+<ol>
+<li>Stale approval used after resume — require reauthorization.</li>
+<li>Subagent uses its parent credential — deny it; issue a task-scoped credential.</li>
+<li>Untrusted source promotes a durable memory rule — gate the write; tombstone the record.</li>
+<li>Trace omits an artifact hash — fail the eval until the envelope is complete.</li>
+<li>Retry repeats a non-idempotent action — make it idempotent or block it.</li>
+<li>Data label disappears before egress — block egress until the label is restored.</li>
+</ol>
+<p>Demo format (2 minutes per team): the failure, the control, the decision in the JSON, and the artifact an auditor would read. Judge it with the Autonomy Review Board (Chapter 2, section 2.13): mission, action catalog, approval workflow, budgets, long-horizon controls, evidence.</p>
+
+<h2>After the workshop</h2>
+<p>Pick one agent workflow you own. Write its intent contract — tools, data, risk ceiling, evidence, expiry — in five lines. Run the matching HarnessLab chapter against it. Bring the gaps to an Autonomy Review Board.</p>
+<p><a class="btn" href="index.html">Open the slide deck →</a></p>
+</main>
+</body>
+</html>
