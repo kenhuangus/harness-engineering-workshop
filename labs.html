@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Advanced Harness Design Patterns — Lab Guide</title>
-<meta name="description" content="Lab guide for the 3-hour Harness Engineering hands-on workshop. Every command, every expected result, and the capstone." />
+<meta name="description" content="Lab guide for Advanced Harness Design Patterns. Every command, every expected result, and the capstone." />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 <style>
 body{font-family:Inter,system-ui,sans-serif;color:#1c1f26;background:#fdfcf9;line-height:1.55;margin:0}
@@ -24,12 +24,12 @@ th{background:#f4f1ea}
 </head>
 <body>
 <main>
-<p class="top"><a href="index.html">← Back to the slide deck</a> · Harness Engineering — 3-Hour Hands-On Workshop · Ken Huang</p>
+<p class="top"><a href="index.html">← Back to the slide deck</a> · Advanced Harness Design Patterns · Ken Huang</p>
 <h1>Lab Guide</h1>
 <p>Source: <a href="https://github.com/kenhuangus/Harness-Engineering-Design-Patterns">kenhuangus/Harness-Engineering-Design-Patterns</a>, the companion repo for <em>Harness Engineering: Design Patterns for Securing Long-Horizon Multi-Agent AI Systems</em> (Packt). Book table of contents: <a href="https://docs.google.com/document/d/1EtLyxS9EH0MR3WxBwG9lWkU40Lpqr4k4CKhqROGugXo/edit">Google Doc</a>. No cloud account, no paid model API, no live secrets. Python 3.11+ and the standard library only.</p>
 <p><strong>Method for every lab:</strong> run first, read the JSON decisions without looking at the implementation, identify the unsafe path and the artifact an auditor would ask for, then inspect <code>scenario.py</code> to find the control that changed the outcome.</p>
 
-<h2>Setup — 0:00–0:10</h2>
+<h2>Setup</h2>
 <pre><code>git clone https://github.com/kenhuangus/Harness-Engineering-Design-Patterns.git
 cd Harness-Engineering-Design-Patterns
 python3 -m venv .venv &amp;&amp; source .venv/bin/activate
@@ -76,7 +76,7 @@ python -m unittest discover -s tests</code></pre>
 <h2>Lab D — ch09 + ch10: Fleet and Data Governance</h2>
 <p>ch09: tenant bulkheads, queues, quotas, rate-limit back-pressure, idempotent retry, quarantined compromised worker, capacity epoch. ch10: labeled data through approved profiles, unsafe egress blocked, residency drift blocked, secret leakage escalated, labels persisted across resume, erasure proved across memory and trace evidence. Book: sections 9.2–9.8, 9.11, and 10.3–10.10.</p>
 
-<h2>Capstone — extend one lab (20 minutes)</h2>
+<h2>Capstone — extend one lab</h2>
 <p>Pick one failure, implement it in the chapter scenario, run it, and show the new decision in the JSON:</p>
 <ol>
 <li>Stale approval used after resume — require reauthorization.</li>
@@ -86,7 +86,7 @@ python -m unittest discover -s tests</code></pre>
 <li>Retry repeats a non-idempotent action — make it idempotent or block it.</li>
 <li>Data label disappears before egress — block egress until the label is restored.</li>
 </ol>
-<p>Demo format (2 minutes per team): the failure, the control, the decision in the JSON, and the artifact an auditor would read. Judge it with the Autonomy Review Board (Chapter 2, section 2.13): mission, action catalog, approval workflow, budgets, long-horizon controls, evidence.</p>
+<p>Demo format per team: the failure, the control, the decision in the JSON, and the artifact an auditor would read. Judge it with the Autonomy Review Board (Chapter 2, section 2.13): mission, action catalog, approval workflow, budgets, long-horizon controls, evidence.</p>
 
 <h2>After the workshop</h2>
 <p>Pick one agent workflow you own. Write its intent contract — tools, data, risk ceiling, evidence, expiry — in five lines. Run the matching HarnessLab chapter against it. Bring the gaps to an Autonomy Review Board.</p>
