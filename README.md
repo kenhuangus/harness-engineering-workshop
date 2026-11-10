@@ -1,31 +1,40 @@
 # Harness Engineering — 3-Hour Hands-On Workshop
 
-**Live site (after Pages is enabled): <https://kenhuangus.github.io/harness-engineering-workshop/>**
+**Live slides: <https://kenhuangus.github.io/harness-engineering-workshop/slides.html#1>**
+**Lab guide: <https://kenhuangus.github.io/harness-engineering-workshop/labs.html>**
 
-A self-contained, GitHub Pages–ready **slide deck** for Ken Huang's 3-hour hands-on
-workshop from *Harness Engineering: Design Patterns for Securing Long-Horizon
-Multi-Agent AI Systems* (Packt). The PPT lives in the website: 22 full-screen
-slides (one per screen, no scrolling) with Prev / Next buttons, keyboard arrows,
-swipe, click-dots, a progress bar, deep links (`#3` = slide 3), and an EN / 中文
-UI toggle. A scrolling **Lab Guide** (`labs.html`) lists every command and every
-expected result.
+A 3-hour hands-on workshop from *Harness Engineering: Design Patterns for
+Securing Long-Horizon Multi-Agent AI Systems* (Packt), by Ken Huang. The slides
+live in the website as a single-file deck modeled on the Packt masterclass deck
+at https://kenhuangus.github.io/packt-harness/slides.html#1 — same engine, same
+chrome, new content.
 
-This site follows the same template as
-[maestro-site](https://kenhuangus.github.io/maestro-site/) (same top bar, deck
-navigation, fonts, and `.nojekyll` Pages setup). Slide 2 keeps the maestro-site
-About Speaker slide.
+## The model
 
-## What's inside
+`slides.html` is the packt-harness deck engine, kept intact: warm-paper theme,
+serif display, terracotta accent, header (Lab Guide / Grid / EN–中文 / Prev /
+Next / Go to / Fullscreen), slide-select dropdown, progress bar, `#N` deep
+links, grid mode, copy buttons, and the bullet / table / code / comparison /
+reference-table renderers. Slides are data: a `slidesData` array of
+`{number, raw_lines, slide_type, code_block, code_filename, highlight_lines}`.
+`slides-zh.js` carries the Chinese pack (`window.SLIDES_ZH`), with the same
+line count per slide.
 
-| File | Purpose |
-|---|---|
-| `index.html` | The 22-slide deck: title, about, thesis, agenda, setup, Blocks A–D, capstone, production mapping, close |
-| `labs.html` | Scrolling lab guide: setup, expected PASS/scores, what to find in each lab, capstone, troubleshooting |
-| `assets/style.css` | maestro-site design system (Space Grotesk + Inter + Kalam) + workshop code/timeline/lab styles |
-| `assets/deck.js` | Slide navigation — Prev/Next, keyboard, swipe, dots, progress, `#N` deep links |
-| `assets/i18n.js` | EN / 中文 UI strings and language toggle |
-| `assets/rough.min.js` | Vendored rough.js v4.6.6 (no CDN — works offline & on Pages) |
-| `.nojekyll` | Tells GitHub Pages to serve files as-is |
+What changed from the model:
+
+- `slidesData`: 47 Packt slides → 22 workshop slides (title, about, thesis,
+  agenda, setup, Blocks A–D, capstone, production mapping, references).
+- `svgMap`: stripped to slide 2 only (the instructor banner). The Packt
+  diagrams were per-slide and would have been wrong on the new numbers.
+- Slide 1 hero: new tagline, description, and four pillars (Control Plane,
+  10 Runnable Labs, Long-Horizon Agents, Capstone).
+- Code slides: 3 (ch01 checkpoint/pause/overlay, ch05 lethal trifecta,
+  ch08 checkpoint/pause), with excerpts copied verbatim from the lab
+  scenarios and GitHub links repointed to the labs repo.
+- The number-based setup branch (old slide 6) was removed so it cannot fire
+  on the wrong slide. Remaining Packt links exist only in unreachable
+  renderers (skill slides, the old setup branch, the old capstone branch);
+  none of the 22 slides uses those types or titles.
 
 ## Workshop at a glance — 180 minutes
 
@@ -42,25 +51,38 @@ About Speaker slide.
 
 - Book: *Harness Engineering: Design Patterns for Securing Long-Horizon Multi-Agent AI Systems*, Ken Huang (Packt). Table of contents: https://docs.google.com/document/d/1EtLyxS9EH0MR3WxBwG9lWkU40Lpqr4k4CKhqROGugXo/edit
 - Labs: https://github.com/kenhuangus/Harness-Engineering-Design-Patterns — 10 chapters, dependency-free, Python 3.11+, no cloud account, no paid model API. All 10 labs verified PASS on 2026-11-10 (`run all`; ch01 0.980, ch02–ch10 1.000; `unittest discover -s tests`: 5 tests OK).
-- Template: https://kenhuangus.github.io/maestro-site/
+- Deck model: https://kenhuangus.github.io/packt-harness/slides.html#1 (repo: https://github.com/kenhuangus/packt-harness)
+
+## Files
+
+| File | Purpose |
+|---|---|
+| `slides.html` | The 22-slide deck (single file, packt-harness engine) |
+| `slides-zh.js` | Chinese slide pack (EN / 中文 toggle) |
+| `labs.html` | Scrolling lab guide: setup, expected PASS/scores, what to find in each lab, capstone, troubleshooting |
+| `index.html` | Landing page, redirects to `slides.html#1` |
+| `.nojekyll` | Tells GitHub Pages to serve files as-is |
 
 ## Run locally
 
 ```bash
-cd harness-engineering-workshop
 python -m http.server 8000
-# open http://localhost:8000
+# open http://localhost:8000/slides.html#1
+```
+
+## Rebuild the deck
+
+```bash
+python3 ~/workspace/harness-workshop/build_workshop_slides.py
+# regenerates slides.html + slides-zh.js from the packt-harness model
 ```
 
 ## Deploy to GitHub Pages
 
-1. Create a repo (e.g. `harness-engineering-workshop`) and push this folder:
-   ```bash
-   git remote add origin https://github.com/<you>/harness-engineering-workshop.git
-   git push -u origin main
-   ```
-2. In the repo: **Settings → Pages → Build and deployment → Source: Deploy from a branch**, branch `main`, folder `/ (root)`.
-3. The site goes live at `https://<you>.github.io/harness-engineering-workshop/`.
+Push this folder to `main` of `harness-engineering-workshop`, then
+**Settings → Pages → Source: Deploy from a branch**, branch `main`, folder
+`/ (root)`. The site goes live at
+`https://kenhuangus.github.io/harness-engineering-workshop/slides.html#1`.
 
 ## Credits
 
