@@ -1,4 +1,4 @@
-# Advanced Harness Design Patterns
+# Harness Engineering: Design Patterns for Securing Long-Horizon Multi-Agent AI Systems
 
 **Live slides: <https://kenhuangus.github.io/harness-engineering-workshop/slides.html#1>**
 **Lab guide: <https://kenhuangus.github.io/harness-engineering-workshop/labs.html>**
