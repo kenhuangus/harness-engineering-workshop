@@ -218,6 +218,7 @@
     /* Comparison Table Styling */
     .slide-table {
       width: 100%;
+      table-layout: fixed;
       border-collapse: collapse;
       margin: 0.35rem 0 0.60rem 0;
       font-size: 0.88rem;
@@ -228,6 +229,7 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     }
     .slide-table th {
+      overflow-wrap: break-word;
       background: var(--accent-sf);
       color: var(--ink);
       font-weight: 750;
@@ -238,6 +240,7 @@
       font-size: 0.95rem;
     }
     .slide-table td {
+      overflow-wrap: break-word;
       padding: 0.40rem 0.70rem;
       border-bottom: 1px solid var(--rule);
       color: var(--ink);
@@ -1182,7 +1185,8 @@
       color: var(--accent-dk);
       font-weight: 650;
       text-decoration: underline;
-      word-break: break-all;
+      word-break: normal;
+      overflow-wrap: break-word;
     }
     .slide-body a:hover { color: var(--accent); }
 
@@ -1647,6 +1651,10 @@
       header { padding: 0 0.6rem; }
       .brand-title { display: none; }
       select.slide-select { max-width: 200px; }
+    }
+    @media (max-width: 640px) {
+      .goto-input, select.slide-select { display: none; }
+      header { gap: 0.4rem; padding: 0 0.5rem; }
     }
   </style>
 </head>
@@ -2913,6 +2921,7 @@ let slideLang = 'en';
       }
 
       bodyEl.innerHTML = bodyHtml;
+      translateDom(bodyEl);
       
       // Dynamic Text-Sizing Engine:
       // Maximize font size so text and graphics fill >= 82% to 92% of the card height
