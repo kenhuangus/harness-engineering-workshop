@@ -23,10 +23,10 @@ Every chapter slide follows that chapter's Abstract in the book (Table of
 contents: https://docs.google.com/document/d/1EtLyxS9EH0MR3WxBwG9lWkU40Lpqr4k4CKhqROGugXo/edit).
 Every code slide is a contiguous, verbatim slice of a scenario file in
 https://github.com/kenhuangus/Harness-Engineering-Design-Patterns — no code is
-invented. Code slides: 8 (ch01 checkpoint/pause), 16 (ch03 broker verify),
-20 (ch04 intent verify), 24 (ch05 lethal trifecta), 28 (ch06 gated write),
-32 (ch07 decision trace), 36 (ch08 checkpoint/pause), 40 (ch09 admission),
-44 (ch10 governed route).
+invented. Code slides: 9 (ch01 checkpoint/pause), 17 (ch03 broker verify),
+21 (ch04 intent verify), 25 (ch05 lethal trifecta), 29 (ch06 gated write),
+33 (ch07 decision trace), 37 (ch08 checkpoint/pause), 41 (ch09 admission),
+45 (ch10 governed route).
 
 ## The model
 
@@ -41,8 +41,8 @@ line count per slide.
 
 ## Labs
 
-All 10 labs verified PASS on 2026-11-10 (`run all`; ch01 0.980, ch02–ch10
-1.000; `unittest discover -s tests`: 5 tests OK). Measured adversarial
+All 10 labs verified PASS on 2026-11-13 (`run all`; ch01 0.980, ch02–ch10
+1.000; `unittest discover -s tests`: 24 tests OK). Measured adversarial
 results (ch03/ch05/ch06/ch08) on 2026-11-11: all PASS 1.000, harness latency
 0.2–1.8 ms median, 1 escalation across 66 decisions. Dependency-free, Python
 3.11+, no cloud account, no paid model API.
